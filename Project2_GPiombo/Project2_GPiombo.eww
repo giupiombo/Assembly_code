@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspace>
+    <project>
+        <path>$WS_DIR$\..\HW1\HW.ewp</path>
+    </project>
+    <project>
+        <path>$WS_DIR$\Project2_GPiombo.ewp</path>
+    </project>
+    <batchBuild />
+</workspace>

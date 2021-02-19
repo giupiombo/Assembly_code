@@ -1,0 +1,70 @@
+#include "msp430.h"                     ; #define controlled include file
+
+        NAME    main                    ; module name
+
+        PUBLIC  main                    ; make the main label vissible
+                                        ; outside this module
+        #define BASE_ADDR       0x200
+        
+        ORG     0FFFEh
+        DC16    main                    
+        
+        #define POINTER         0x100
+        
+        ORG POINTER
+        DC8 0x15, 0x29, 0x28, 0x32, 0x61, 0x28, 0x32, 0x61, 0x02, 0x2E, 0x2D, 0x60
+        
+        #define POINTER2        0x210
+        
+        RSEG CODE
+
+main:   NOP                             ; main program
+        MOV.W   #WDTPW+WDTHOLD,&WDTCTL  ; Stop watchdog timer
+        
+        MOV.W #BASE_ADDR, R4    
+        MOV.W #0, R6
+        
+loop:
+        MOV.B #0, 0(R4)
+        INC.W R4
+        INC.W R6
+
+        CMP.W #32, R6
+        JNE loop
+        
+        
+        MOV.W #BASE_ADDR, R4
+        MOV.W #POINTER, R5
+        MOV.W #0, R6
+        
+loop2:
+        MOV.B @R5, 0(R4)
+        INC.W R4
+        INC.W R5
+        INC.W R6
+        
+        CMP.W #12, R6
+        JNE loop2
+        
+        
+        MOV.W #BASE_ADDR, R4
+        MOV.W #POINTER2, R5
+        MOV.W #0, R6
+        MOV.W #0, R7
+        MOV.W #0x41, R8
+        
+loop3:
+        MOV.B @R4, R7
+        XOR R8, R7
+        MOV.B R7, 0(R5)
+        MOV.W #0, R7
+        INC.W R4
+        INC.W R5
+        INC.W R6
+        
+        CMP.W #12, R6
+        JNE loop3
+        
+        JMP $                           ; jump to current location '$'
+                                        ; (endless loop)
+        END
